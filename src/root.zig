@@ -66,6 +66,10 @@ pub export fn add_Q0f31_Q0f31(a: i32, b: i32) i32 {
     return a +| b;
 }
 
+pub export fn sub_Q0f31_Q0f31(a: i32, b: i32) i32 {
+    return a -| b;
+}
+
 pub export fn mul_Q0f31_Q0f31(a: i32, b: i32) i32 {
     const sign: i32 = (a & i32_min) ^ (b & i32_min);
     const x = @abs(a);
