@@ -29,6 +29,16 @@ pub fn build(b: *std.Build) void {
     // running `zig build`).
     b.installArtifact(lib);
 
+    const exe = b.addExecutable(.{
+        .name = "zerofp-exe",
+        .root_source_file = .{.path = "src/main.zig"},
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_exe = b.addRunArtifact(exe);
+    const run_step = b.step("run", "Run main");
+    run_step.dependOn(&run_exe.step);
+
     // Creates a step for unit testing. This only builds the test executable
     // but does not run it.
     const lib_unit_tests = b.addTest(.{
