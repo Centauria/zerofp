@@ -116,6 +116,8 @@ pub export fn mul_Q0f15_Q0f15(a: i16, b: i16) i16 {
 
 test "basic add functionality" {
     try testing.expect(add_Q0f31_Q0f31(3, 7) == 10);
+    try testing.expect(add_Q0f31_Q0f31(-2147483648, 7) == -2147483641);
+    try testing.expect(add_Q0f31_Q0f31(-2147483648, 0) == -2147483648);
     try testing.expect(add_Q0f31_Q0f31(-455097958, -969180166) == -1424278124);
     try testing.expect(add_Q0f31_Q0f31(1514432915, -1662737055) == -148304140);
     try testing.expect(add_Q0f31_Q0f31(-1914173523, 1713635963) == -200537560);
@@ -168,6 +170,22 @@ test "basic add functionality" {
     try testing.expect(add_Q0f31_Q0f31(-576026712, 1562178880) == 986152168);
 }
 
+test "subtract" {
+    try testing.expect(sub_Q0f31_Q0f31(-2147483648, -2147483648) == 0);
+    try testing.expect(sub_Q0f31_Q0f31(0, -2147483648) == 2147483647);
+    try testing.expect(sub_Q0f31_Q0f31(-2147483648, -2147483600) == -48);
+    try testing.expect(sub_Q0f31_Q0f31(-1073327226, -825140187) == -248187039);
+    try testing.expect(sub_Q0f31_Q0f31(-1011216278, 1304877587) == -2147483648);
+    try testing.expect(sub_Q0f31_Q0f31(623697224, 1633751330) == -1010054106);
+    try testing.expect(sub_Q0f31_Q0f31(1323456925, 1414745800) == -91288875);
+    try testing.expect(sub_Q0f31_Q0f31(-1970623658, -343005632) == -1627618026);
+    try testing.expect(sub_Q0f31_Q0f31(-2024974575, -849462305) == -1175512270);
+    try testing.expect(sub_Q0f31_Q0f31(-1477302965, -1099406504) == -377896461);
+    try testing.expect(sub_Q0f31_Q0f31(-1350865645, 2032062192) == -2147483648);
+    try testing.expect(sub_Q0f31_Q0f31(-749481172, 2094907806) == -2147483648);
+    try testing.expect(sub_Q0f31_Q0f31(-1094145654, -1121964257) == 27818603);
+}
+
 test "multiply Q0f15" {
     try testing.expect(mul_Q0f15_Q0f15(1, 1) == 0);
     try testing.expect(mul_Q0f15_Q0f15(-0x4000, 0x4000) == -0x2000);
@@ -197,6 +215,11 @@ test "multiply Q0f15" {
 }
 
 test "multiply Q0f31" {
+    try testing.expect(mul_Q0f31_Q0f31(0, 477133664) == 0);
+    try testing.expect(mul_Q0f31_Q0f31(0, -2147483648) == 0);
+    try testing.expect(mul_Q0f31_Q0f31(0, 2147483647) == 0);
+    try testing.expect(mul_Q0f31_Q0f31(-2147483648, 0) == 0);
+    try testing.expect(mul_Q0f31_Q0f31(2147483647, 0) == 0);
     try testing.expect(mul_Q0f31_Q0f31(-268033373, 159496041) == -19907142);
     try testing.expect(mul_Q0f31_Q0f31(1006926165, -890238529) == -417420858);
     try testing.expect(mul_Q0f31_Q0f31(822770611, 941782343) == 360827350);
@@ -220,6 +243,9 @@ test "multiply Q0f31" {
 }
 
 test "conversion" {
+    try testing.expect(convert_F_Q32(0.0, 0) == 0);
+    try testing.expect(convert_F_Q32(-1.0, 0) == -2147483648);
+    try testing.expect(convert_F_Q32(1.0, 0) == 2147483647);
     try testing.expect(convert_F_Q32(0.87, 0) == 0x6F5C2900);
     try testing.expect(convert_F_Q32(0.3387, 0) == 0x2B5A8580);
     try testing.expect(convert_F_Q32(-0.0114514, 0) == -0x1773D4E);
