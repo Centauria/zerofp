@@ -20,6 +20,7 @@ pub export fn convert_F_Q32(a: f32, q: i8) i32 {
     const a_u32: u32 = @bitCast(a);
     var exp: i8 = @intCast((a_u32 & 0x7F800000) >> 23);
     exp -= 127;
+    exp -= q;
     if (exp >= 0) {
         if (a < 0) {
             return i32_min;
@@ -31,7 +32,7 @@ pub export fn convert_F_Q32(a: f32, q: i8) i32 {
     } else if (exp < -24) {
         return 0;
     }
-    exp += 8 - q;
+    exp += 8;
     var frac: u32 = (a_u32 & 0x7FFFFF) | 0x800000;
     var result: i32 = 0;
     if (exp < 0) {
