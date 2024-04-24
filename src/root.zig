@@ -74,9 +74,16 @@ pub export fn mul_Q0f31_Q0f31(a: i32, b: i32) i32 {
     const hy = y >> 15;
     const lx = x & 0x7FFF;
     const ly = y & 0x7FFF;
-    const result: i32 = @intCast((hx * hy +| ((hy * lx + hx * ly) >> 15) +| (lx >> 14) + (ly >> 14)) >> 1);
+    var r: u32 = hx * hy;
+    var s: u32 = hy * lx + hx * ly + ((lx * ly) >> 16);
+    s >>= 15;
+    r += s;
+    const rem = r & 1;
+    r >>= 1;
+    r += rem;
+    var result: i32 = @intCast(r);
     if (sign != 0) {
-        return -result;
+        result = -result;
     }
     return result;
 }
@@ -89,15 +96,72 @@ pub export fn mul_Q0f15_Q0f15(a: i16, b: i16) i16 {
     const hy = y >> 7;
     const lx = x & 0x7F;
     const ly = y & 0x7F;
-    const result: i16 = @intCast((hx * hy +| ((hy * lx + hx * ly) >> 7) +| (lx >> 7) + (ly >> 7)) >> 1);
+    var r: u16 = hx * hy;
+    var s: u16 = hy * lx + hx * ly + ((lx * ly) >> 8);
+    s >>= 7;
+    r += s;
+    const rem = r & 1;
+    r >>= 1;
+    r += rem;
+    var result: i16 = @intCast(r);
     if (sign != 0) {
-        return -result;
+        result = -result;
     }
     return result;
 }
 
 test "basic add functionality" {
     try testing.expect(add_Q0f31_Q0f31(3, 7) == 10);
+    try testing.expect(add_Q0f31_Q0f31(-455097958, -969180166) == -1424278124);
+    try testing.expect(add_Q0f31_Q0f31(1514432915, -1662737055) == -148304140);
+    try testing.expect(add_Q0f31_Q0f31(-1914173523, 1713635963) == -200537560);
+    try testing.expect(add_Q0f31_Q0f31(2041722576, -433296828) == 1608425748);
+    try testing.expect(add_Q0f31_Q0f31(1855740775, 1211581484) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(-1796826983, 552354270) == -1244472713);
+    try testing.expect(add_Q0f31_Q0f31(-358680292, -95966905) == -454647197);
+    try testing.expect(add_Q0f31_Q0f31(1256111109, 1539035832) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(-2021743425, -448636700) == -2147483648);
+    try testing.expect(add_Q0f31_Q0f31(-1875700498, -588188608) == -2147483648);
+    try testing.expect(add_Q0f31_Q0f31(2029434865, 1125449905) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(898261784, 1194547110) == 2092808894);
+    try testing.expect(add_Q0f31_Q0f31(-669177291, -722306058) == -1391483349);
+    try testing.expect(add_Q0f31_Q0f31(878753559, -259098850) == 619654709);
+    try testing.expect(add_Q0f31_Q0f31(1111462036, -1354753620) == -243291584);
+    try testing.expect(add_Q0f31_Q0f31(-31810020, 764323027) == 732513007);
+    try testing.expect(add_Q0f31_Q0f31(-1636461629, 796746603) == -839715026);
+    try testing.expect(add_Q0f31_Q0f31(-436920629, -48496960) == -485417589);
+    try testing.expect(add_Q0f31_Q0f31(1775676277, -785024321) == 990651956);
+    try testing.expect(add_Q0f31_Q0f31(-1934404114, -1138555678) == -2147483648);
+    try testing.expect(add_Q0f31_Q0f31(1201907042, 489505879) == 1691412921);
+    try testing.expect(add_Q0f31_Q0f31(-814932486, -117791957) == -932724443);
+    try testing.expect(add_Q0f31_Q0f31(1227586588, 2123881080) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(547289755, 212507279) == 759797034);
+    try testing.expect(add_Q0f31_Q0f31(109198334, -1900432070) == -1791233736);
+    try testing.expect(add_Q0f31_Q0f31(1926731960, 997348573) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(712536187, -549039268) == 163496919);
+    try testing.expect(add_Q0f31_Q0f31(1820650872, -1058287363) == 762363509);
+    try testing.expect(add_Q0f31_Q0f31(271244056, 1392758178) == 1664002234);
+    try testing.expect(add_Q0f31_Q0f31(1072517328, 1100443446) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(1476341355, 2114925732) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(-1010713499, -638416526) == -1649130025);
+    try testing.expect(add_Q0f31_Q0f31(-367051278, 59450739) == -307600539);
+    try testing.expect(add_Q0f31_Q0f31(-1321723900, 960843345) == -360880555);
+    try testing.expect(add_Q0f31_Q0f31(333750603, -71354916) == 262395687);
+    try testing.expect(add_Q0f31_Q0f31(1018705994, 1475515670) == 2147483647);
+    try testing.expect(add_Q0f31_Q0f31(-619428030, 1636778256) == 1017350226);
+    try testing.expect(add_Q0f31_Q0f31(1295180856, 696701797) == 1991882653);
+    try testing.expect(add_Q0f31_Q0f31(1219646733, -355537169) == 864109564);
+    try testing.expect(add_Q0f31_Q0f31(-1209550030, -1399291694) == -2147483648);
+    try testing.expect(add_Q0f31_Q0f31(181849562, -1545071459) == -1363221897);
+    try testing.expect(add_Q0f31_Q0f31(255114900, -2142142439) == -1887027539);
+    try testing.expect(add_Q0f31_Q0f31(194716655, -171758947) == 22957708);
+    try testing.expect(add_Q0f31_Q0f31(-1606836369, 1774706902) == 167870533);
+    try testing.expect(add_Q0f31_Q0f31(1229302677, -1313663089) == -84360412);
+    try testing.expect(add_Q0f31_Q0f31(-873645378, 407561633) == -466083745);
+    try testing.expect(add_Q0f31_Q0f31(1039785982, -1207067526) == -167281544);
+    try testing.expect(add_Q0f31_Q0f31(-811657865, 404976376) == -406681489);
+    try testing.expect(add_Q0f31_Q0f31(832284473, -533928885) == 298355588);
+    try testing.expect(add_Q0f31_Q0f31(-576026712, 1562178880) == 986152168);
 }
 
 test "multiply Q0f15" {
@@ -106,11 +170,49 @@ test "multiply Q0f15" {
     try testing.expect(mul_Q0f15_Q0f15(0x2CE6, 0x6667) == 0x23EB);
     try testing.expect(mul_Q0f15_Q0f15(0, 0) == 0);
     try testing.expect(mul_Q0f15_Q0f15(-0x3333, 0x628F) == -(0x276C));
+    try testing.expect(mul_Q0f15_Q0f15(25934, 14366) == 11370);
+    try testing.expect(mul_Q0f15_Q0f15(17517, -22948) == -12267);
+    try testing.expect(mul_Q0f15_Q0f15(21808, 25760) == 17144);
+    try testing.expect(mul_Q0f15_Q0f15(26767, 15173) == 12394);
+    try testing.expect(mul_Q0f15_Q0f15(-26404, 28491) == -22958);
+    try testing.expect(mul_Q0f15_Q0f15(-1567, 10624) == -508);
+    try testing.expect(mul_Q0f15_Q0f15(21081, 25581) == 16457);
+    try testing.expect(mul_Q0f15_Q0f15(-22940, 9379) == -6566);
+    try testing.expect(mul_Q0f15_Q0f15(-10138, -11104) == 3435);
+    try testing.expect(mul_Q0f15_Q0f15(-24630, 25554) == -19208);
+    try testing.expect(mul_Q0f15_Q0f15(2442, -3143) == -234);
+    try testing.expect(mul_Q0f15_Q0f15(-345, -27336) == 288);
+    try testing.expect(mul_Q0f15_Q0f15(30952, 32715) == 30902);
+    try testing.expect(mul_Q0f15_Q0f15(-299, -24401) == 223);
+    try testing.expect(mul_Q0f15_Q0f15(12831, -15211) == -5956);
+    try testing.expect(mul_Q0f15_Q0f15(27125, 20522) == 16988);
+    try testing.expect(mul_Q0f15_Q0f15(11962, 30627) == 11180);
+    try testing.expect(mul_Q0f15_Q0f15(-552, 27371) == -461);
+    try testing.expect(mul_Q0f15_Q0f15(11949, 21142) == 7710);
+    try testing.expect(mul_Q0f15_Q0f15(11193, -26266) == -8972);
 }
 
 test "multiply Q0f31" {
-    try testing.expect(mul_Q0f31_Q0f31(-0x3D0E5604, -0x4A3D70A4) == 0x2369984A);
-    try testing.expect(mul_Q0f31_Q0f31(-0x374bc6a, 0x7eb851ec) == -0x36be37d);
+    try testing.expect(mul_Q0f31_Q0f31(-268033373, 159496041) == -19907142);
+    try testing.expect(mul_Q0f31_Q0f31(1006926165, -890238529) == -417420858);
+    try testing.expect(mul_Q0f31_Q0f31(822770611, 941782343) == 360827350);
+    try testing.expect(mul_Q0f31_Q0f31(1845688516, 1528251202) == 1313479474);
+    try testing.expect(mul_Q0f31_Q0f31(-1764283736, -163919054) == 134669114);
+    try testing.expect(mul_Q0f31_Q0f31(1399341682, -933588179) == -608344028);
+    try testing.expect(mul_Q0f31_Q0f31(2089991838, -607293917) == -591035620);
+    try testing.expect(mul_Q0f31_Q0f31(2139400768, -435302993) == -433664563);
+    try testing.expect(mul_Q0f31_Q0f31(-1620284073, -1385854610) == 1045632247);
+    try testing.expect(mul_Q0f31_Q0f31(-1808676534, -705973082) == 594592163);
+    try testing.expect(mul_Q0f31_Q0f31(-1398230282, 113356149) == -73806383);
+    try testing.expect(mul_Q0f31_Q0f31(1341641082, 309504604) == 193363098);
+    try testing.expect(mul_Q0f31_Q0f31(241222531, -1026453521) == -115299465);
+    try testing.expect(mul_Q0f31_Q0f31(-2016208064, 23641946) == -22196715);
+    try testing.expect(mul_Q0f31_Q0f31(-833752033, -188442154) == 73161921);
+    try testing.expect(mul_Q0f31_Q0f31(-792930459, 316918011) == -117017861);
+    try testing.expect(mul_Q0f31_Q0f31(-1743205570, 920641847) == -747324897);
+    try testing.expect(mul_Q0f31_Q0f31(1483610577, 1362362832) == 941202001);
+    try testing.expect(mul_Q0f31_Q0f31(571370113, 701463126) == 186634746);
+    try testing.expect(mul_Q0f31_Q0f31(-1489832097, 1895981144) == -1315350441);
 }
 
 test "conversion" {
