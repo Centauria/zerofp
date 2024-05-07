@@ -62,12 +62,16 @@ pub export fn convert_F_Q32_2(a: f32, q: i8) i32 {
     return @as(i32, @intFromFloat(a_f32));
 }
 
-pub export fn add_Q0f31_Q0f31(a: i32, b: i32) i32 {
+pub export fn add_limit(a: i32, b: i32) i32 {
     return a +| b;
 }
 
-pub export fn sub_Q0f31_Q0f31(a: i32, b: i32) i32 {
+pub export fn sub_limit(a: i32, b: i32) i32 {
     return a -| b;
+}
+
+pub export fn mul_limit(a: i32, b: i32) i32 {
+    return a *| b;
 }
 
 pub export fn mul_Q0f31_Q0f31(a: i32, b: i32) i32 {
@@ -115,75 +119,75 @@ pub export fn mul_Q0f15_Q0f15(a: i16, b: i16) i16 {
 }
 
 test "basic add functionality" {
-    try testing.expect(add_Q0f31_Q0f31(3, 7) == 10);
-    try testing.expect(add_Q0f31_Q0f31(-2147483648, 7) == -2147483641);
-    try testing.expect(add_Q0f31_Q0f31(-2147483648, 0) == -2147483648);
-    try testing.expect(add_Q0f31_Q0f31(-455097958, -969180166) == -1424278124);
-    try testing.expect(add_Q0f31_Q0f31(1514432915, -1662737055) == -148304140);
-    try testing.expect(add_Q0f31_Q0f31(-1914173523, 1713635963) == -200537560);
-    try testing.expect(add_Q0f31_Q0f31(2041722576, -433296828) == 1608425748);
-    try testing.expect(add_Q0f31_Q0f31(1855740775, 1211581484) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(-1796826983, 552354270) == -1244472713);
-    try testing.expect(add_Q0f31_Q0f31(-358680292, -95966905) == -454647197);
-    try testing.expect(add_Q0f31_Q0f31(1256111109, 1539035832) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(-2021743425, -448636700) == -2147483648);
-    try testing.expect(add_Q0f31_Q0f31(-1875700498, -588188608) == -2147483648);
-    try testing.expect(add_Q0f31_Q0f31(2029434865, 1125449905) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(898261784, 1194547110) == 2092808894);
-    try testing.expect(add_Q0f31_Q0f31(-669177291, -722306058) == -1391483349);
-    try testing.expect(add_Q0f31_Q0f31(878753559, -259098850) == 619654709);
-    try testing.expect(add_Q0f31_Q0f31(1111462036, -1354753620) == -243291584);
-    try testing.expect(add_Q0f31_Q0f31(-31810020, 764323027) == 732513007);
-    try testing.expect(add_Q0f31_Q0f31(-1636461629, 796746603) == -839715026);
-    try testing.expect(add_Q0f31_Q0f31(-436920629, -48496960) == -485417589);
-    try testing.expect(add_Q0f31_Q0f31(1775676277, -785024321) == 990651956);
-    try testing.expect(add_Q0f31_Q0f31(-1934404114, -1138555678) == -2147483648);
-    try testing.expect(add_Q0f31_Q0f31(1201907042, 489505879) == 1691412921);
-    try testing.expect(add_Q0f31_Q0f31(-814932486, -117791957) == -932724443);
-    try testing.expect(add_Q0f31_Q0f31(1227586588, 2123881080) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(547289755, 212507279) == 759797034);
-    try testing.expect(add_Q0f31_Q0f31(109198334, -1900432070) == -1791233736);
-    try testing.expect(add_Q0f31_Q0f31(1926731960, 997348573) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(712536187, -549039268) == 163496919);
-    try testing.expect(add_Q0f31_Q0f31(1820650872, -1058287363) == 762363509);
-    try testing.expect(add_Q0f31_Q0f31(271244056, 1392758178) == 1664002234);
-    try testing.expect(add_Q0f31_Q0f31(1072517328, 1100443446) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(1476341355, 2114925732) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(-1010713499, -638416526) == -1649130025);
-    try testing.expect(add_Q0f31_Q0f31(-367051278, 59450739) == -307600539);
-    try testing.expect(add_Q0f31_Q0f31(-1321723900, 960843345) == -360880555);
-    try testing.expect(add_Q0f31_Q0f31(333750603, -71354916) == 262395687);
-    try testing.expect(add_Q0f31_Q0f31(1018705994, 1475515670) == 2147483647);
-    try testing.expect(add_Q0f31_Q0f31(-619428030, 1636778256) == 1017350226);
-    try testing.expect(add_Q0f31_Q0f31(1295180856, 696701797) == 1991882653);
-    try testing.expect(add_Q0f31_Q0f31(1219646733, -355537169) == 864109564);
-    try testing.expect(add_Q0f31_Q0f31(-1209550030, -1399291694) == -2147483648);
-    try testing.expect(add_Q0f31_Q0f31(181849562, -1545071459) == -1363221897);
-    try testing.expect(add_Q0f31_Q0f31(255114900, -2142142439) == -1887027539);
-    try testing.expect(add_Q0f31_Q0f31(194716655, -171758947) == 22957708);
-    try testing.expect(add_Q0f31_Q0f31(-1606836369, 1774706902) == 167870533);
-    try testing.expect(add_Q0f31_Q0f31(1229302677, -1313663089) == -84360412);
-    try testing.expect(add_Q0f31_Q0f31(-873645378, 407561633) == -466083745);
-    try testing.expect(add_Q0f31_Q0f31(1039785982, -1207067526) == -167281544);
-    try testing.expect(add_Q0f31_Q0f31(-811657865, 404976376) == -406681489);
-    try testing.expect(add_Q0f31_Q0f31(832284473, -533928885) == 298355588);
-    try testing.expect(add_Q0f31_Q0f31(-576026712, 1562178880) == 986152168);
+    try testing.expect(add_limit(3, 7) == 10);
+    try testing.expect(add_limit(-2147483648, 7) == -2147483641);
+    try testing.expect(add_limit(-2147483648, 0) == -2147483648);
+    try testing.expect(add_limit(-455097958, -969180166) == -1424278124);
+    try testing.expect(add_limit(1514432915, -1662737055) == -148304140);
+    try testing.expect(add_limit(-1914173523, 1713635963) == -200537560);
+    try testing.expect(add_limit(2041722576, -433296828) == 1608425748);
+    try testing.expect(add_limit(1855740775, 1211581484) == 2147483647);
+    try testing.expect(add_limit(-1796826983, 552354270) == -1244472713);
+    try testing.expect(add_limit(-358680292, -95966905) == -454647197);
+    try testing.expect(add_limit(1256111109, 1539035832) == 2147483647);
+    try testing.expect(add_limit(-2021743425, -448636700) == -2147483648);
+    try testing.expect(add_limit(-1875700498, -588188608) == -2147483648);
+    try testing.expect(add_limit(2029434865, 1125449905) == 2147483647);
+    try testing.expect(add_limit(898261784, 1194547110) == 2092808894);
+    try testing.expect(add_limit(-669177291, -722306058) == -1391483349);
+    try testing.expect(add_limit(878753559, -259098850) == 619654709);
+    try testing.expect(add_limit(1111462036, -1354753620) == -243291584);
+    try testing.expect(add_limit(-31810020, 764323027) == 732513007);
+    try testing.expect(add_limit(-1636461629, 796746603) == -839715026);
+    try testing.expect(add_limit(-436920629, -48496960) == -485417589);
+    try testing.expect(add_limit(1775676277, -785024321) == 990651956);
+    try testing.expect(add_limit(-1934404114, -1138555678) == -2147483648);
+    try testing.expect(add_limit(1201907042, 489505879) == 1691412921);
+    try testing.expect(add_limit(-814932486, -117791957) == -932724443);
+    try testing.expect(add_limit(1227586588, 2123881080) == 2147483647);
+    try testing.expect(add_limit(547289755, 212507279) == 759797034);
+    try testing.expect(add_limit(109198334, -1900432070) == -1791233736);
+    try testing.expect(add_limit(1926731960, 997348573) == 2147483647);
+    try testing.expect(add_limit(712536187, -549039268) == 163496919);
+    try testing.expect(add_limit(1820650872, -1058287363) == 762363509);
+    try testing.expect(add_limit(271244056, 1392758178) == 1664002234);
+    try testing.expect(add_limit(1072517328, 1100443446) == 2147483647);
+    try testing.expect(add_limit(1476341355, 2114925732) == 2147483647);
+    try testing.expect(add_limit(-1010713499, -638416526) == -1649130025);
+    try testing.expect(add_limit(-367051278, 59450739) == -307600539);
+    try testing.expect(add_limit(-1321723900, 960843345) == -360880555);
+    try testing.expect(add_limit(333750603, -71354916) == 262395687);
+    try testing.expect(add_limit(1018705994, 1475515670) == 2147483647);
+    try testing.expect(add_limit(-619428030, 1636778256) == 1017350226);
+    try testing.expect(add_limit(1295180856, 696701797) == 1991882653);
+    try testing.expect(add_limit(1219646733, -355537169) == 864109564);
+    try testing.expect(add_limit(-1209550030, -1399291694) == -2147483648);
+    try testing.expect(add_limit(181849562, -1545071459) == -1363221897);
+    try testing.expect(add_limit(255114900, -2142142439) == -1887027539);
+    try testing.expect(add_limit(194716655, -171758947) == 22957708);
+    try testing.expect(add_limit(-1606836369, 1774706902) == 167870533);
+    try testing.expect(add_limit(1229302677, -1313663089) == -84360412);
+    try testing.expect(add_limit(-873645378, 407561633) == -466083745);
+    try testing.expect(add_limit(1039785982, -1207067526) == -167281544);
+    try testing.expect(add_limit(-811657865, 404976376) == -406681489);
+    try testing.expect(add_limit(832284473, -533928885) == 298355588);
+    try testing.expect(add_limit(-576026712, 1562178880) == 986152168);
 }
 
 test "subtract" {
-    try testing.expect(sub_Q0f31_Q0f31(-2147483648, -2147483648) == 0);
-    try testing.expect(sub_Q0f31_Q0f31(0, -2147483648) == 2147483647);
-    try testing.expect(sub_Q0f31_Q0f31(-2147483648, -2147483600) == -48);
-    try testing.expect(sub_Q0f31_Q0f31(-1073327226, -825140187) == -248187039);
-    try testing.expect(sub_Q0f31_Q0f31(-1011216278, 1304877587) == -2147483648);
-    try testing.expect(sub_Q0f31_Q0f31(623697224, 1633751330) == -1010054106);
-    try testing.expect(sub_Q0f31_Q0f31(1323456925, 1414745800) == -91288875);
-    try testing.expect(sub_Q0f31_Q0f31(-1970623658, -343005632) == -1627618026);
-    try testing.expect(sub_Q0f31_Q0f31(-2024974575, -849462305) == -1175512270);
-    try testing.expect(sub_Q0f31_Q0f31(-1477302965, -1099406504) == -377896461);
-    try testing.expect(sub_Q0f31_Q0f31(-1350865645, 2032062192) == -2147483648);
-    try testing.expect(sub_Q0f31_Q0f31(-749481172, 2094907806) == -2147483648);
-    try testing.expect(sub_Q0f31_Q0f31(-1094145654, -1121964257) == 27818603);
+    try testing.expect(sub_limit(-2147483648, -2147483648) == 0);
+    try testing.expect(sub_limit(0, -2147483648) == 2147483647);
+    try testing.expect(sub_limit(-2147483648, -2147483600) == -48);
+    try testing.expect(sub_limit(-1073327226, -825140187) == -248187039);
+    try testing.expect(sub_limit(-1011216278, 1304877587) == -2147483648);
+    try testing.expect(sub_limit(623697224, 1633751330) == -1010054106);
+    try testing.expect(sub_limit(1323456925, 1414745800) == -91288875);
+    try testing.expect(sub_limit(-1970623658, -343005632) == -1627618026);
+    try testing.expect(sub_limit(-2024974575, -849462305) == -1175512270);
+    try testing.expect(sub_limit(-1477302965, -1099406504) == -377896461);
+    try testing.expect(sub_limit(-1350865645, 2032062192) == -2147483648);
+    try testing.expect(sub_limit(-749481172, 2094907806) == -2147483648);
+    try testing.expect(sub_limit(-1094145654, -1121964257) == 27818603);
 }
 
 test "multiply Q0f15" {
