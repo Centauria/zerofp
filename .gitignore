@@ -5,3 +5,5 @@ build/
 build-*/
 docgen_tmp/
 .idea
+.vscode
+.xmake
